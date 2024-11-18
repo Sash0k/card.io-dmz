@@ -73,21 +73,21 @@ struct StripeSum
 };
 
 struct StripeSumCompareDescending
- : public std::binary_function<StripeSum, StripeSum, bool> {
+ : public std::__binary_function<StripeSum, StripeSum, bool> {
   inline bool operator()(StripeSum const &stripe_sum_1, StripeSum const &stripe_sum_2) const {
     return (stripe_sum_1.sum > stripe_sum_2.sum);
   }
 };
 
 struct CharacterRectCompareSumDescending
- : public std::binary_function<CharacterRect, CharacterRect, bool> {
+ : public std::__binary_function<CharacterRect, CharacterRect, bool> {
   inline bool operator()(CharacterRect const &character_rect_1, CharacterRect const &character_rect_2) const {
     return (character_rect_1.sum > character_rect_2.sum);
   }
 };
 
 struct GroupedRectsCompareLeftAscending
- : public std::binary_function<GroupedRects, GroupedRects, bool> {
+ : public std::__binary_function<GroupedRects, GroupedRects, bool> {
   inline bool operator()(GroupedRects const &grouped_rect_1, GroupedRects const &grouped_rect_2) const {
     return (grouped_rect_1.left < grouped_rect_2.left);
   }
