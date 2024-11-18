@@ -1,3 +1,5 @@
+# OUTDATED
+
 This `cython_dmz` directory is a replica of the one we use to build and run
 model-training scripts for character recognition, using [Cython](http://cython.org).
 
