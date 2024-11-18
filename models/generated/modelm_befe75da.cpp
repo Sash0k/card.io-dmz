@@ -1772,13 +1772,13 @@ DMZ_INTERNAL ModelMOutput_befe75da applym_befe75da(const ModelMInput_befe75da& i
   Eigen::Map<ModelMHiddenB_befe75da, Eigen::Aligned> hidden_b((float *)data_dd02e979);
 
   ModelMIntermediateResult_befe75da intermediate_result = hidden_W * input + hidden_b;
-  intermediate_result = intermediate_result.unaryExpr(std::ptr_fun(tanhf));
+  intermediate_result = intermediate_result.unaryExpr([](float x) { return tanhf(x); });
 
   Eigen::Map<ModelMLogisticW_befe75da, Eigen::Aligned> logistic_W((float *)data_209a6565);
   Eigen::Map<ModelMLogisticB_befe75da, Eigen::Aligned> logistic_b((float *)data_da0dff50);
 
   ModelMOutput_befe75da output = logistic_W * intermediate_result + logistic_b;
-  output = output.unaryExpr(std::ptr_fun(expf));
+  output = output.unaryExpr([](float x) { return expf(x); });
   float sum = output.sum();
   output /= sum;
 

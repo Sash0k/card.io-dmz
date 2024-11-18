@@ -12680,7 +12680,7 @@ DMZ_INTERNAL ModelCConvResult_bf4dd6c8_1 convolve_bf4dd6c8_1(const ModelCConvInp
   }
 
   // Perform post-convolution transform
-  accumulated_results = accumulated_results.unaryExpr(std::ptr_fun(rectified_linear_unit_activation_bf4dd6c8));
+  accumulated_results = accumulated_results.unaryExpr([](float x) { return rectified_linear_unit_activation_bf4dd6c8(x); });
   
   return accumulated_results;
 }
@@ -12790,7 +12790,7 @@ DMZ_INTERNAL ModelCConvResult_bf4dd6c8_2 convolve_bf4dd6c8_2(const ModelCConvInp
   }
 
   // Perform post-convolution transform
-  accumulated_results = accumulated_results.unaryExpr(std::ptr_fun(rectified_linear_unit_activation_bf4dd6c8));
+  accumulated_results = accumulated_results.unaryExpr([](float x) { return rectified_linear_unit_activation_bf4dd6c8(x); });
   
   return accumulated_results;
 }
@@ -13482,7 +13482,7 @@ DMZ_INTERNAL ModelCOutput_bf4dd6c8 applyc_bf4dd6c8(const ModelCInput_bf4dd6c8& i
 
   Eigen::Map< Eigen::Matrix<float, 120, 1> > mapped_conv_result(convolution_result_2.data());
   ModelCHiddenResult_bf4dd6c8 hidden_result = hidden_W * mapped_conv_result + hidden_b;
-  hidden_result = hidden_result.unaryExpr(std::ptr_fun(rectified_linear_unit_activation_bf4dd6c8));
+  hidden_result = hidden_result.unaryExpr([](float x) { return rectified_linear_unit_activation_bf4dd6c8(x); });
 #if TEST_GENERATED_MODELS
   if (test_generated_models) {
     Eigen::Map<ModelCHiddenResult_bf4dd6c8, Eigen::Aligned> known_good_output_hidden((float *)data_2ea7785b);
@@ -13497,7 +13497,7 @@ DMZ_INTERNAL ModelCOutput_bf4dd6c8 applyc_bf4dd6c8(const ModelCInput_bf4dd6c8& i
   ModelCOutput_bf4dd6c8 output = logistic_W * hidden_result + logistic_b;
 
   // Convert to probabilities
-  output = output.unaryExpr(std::ptr_fun(expf));
+  output = output.unaryExpr([](float x) { return expf(x); });
   float sum = output.sum();
   output /= sum;
 

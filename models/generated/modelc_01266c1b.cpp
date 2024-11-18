@@ -1913,14 +1913,14 @@ DMZ_INTERNAL ModelCOutput_01266c1b applyc_01266c1b(const ModelCInput_01266c1b& i
   }
 
   // Perform post-convolution transform
-  accumulated_convolutions = accumulated_convolutions.unaryExpr(std::ptr_fun(tanhf));
+  accumulated_convolutions = accumulated_convolutions.unaryExpr([](float x) { return tanhf(x); });
 
   // Apply hidden layer
   Eigen::Map<ModelCHiddenW_01266c1b, Eigen::Aligned> hidden_W((float *)data_cdc19833);
   Eigen::Map<ModelCHiddenB_01266c1b, Eigen::Aligned> hidden_b((float *)data_e6740ec9);
 
   ModelCHiddenResult_01266c1b hidden_result = hidden_W * accumulated_convolutions + hidden_b;
-  hidden_result = hidden_result.unaryExpr(std::ptr_fun(tanhf));
+  hidden_result = hidden_result.unaryExpr([](float x) { return tanhf(x); });
 
   // Apply logistic layer
   Eigen::Map<ModelCLogisticW_01266c1b, Eigen::Aligned> logistic_W((float *)data_1028bdda);
@@ -1929,7 +1929,7 @@ DMZ_INTERNAL ModelCOutput_01266c1b applyc_01266c1b(const ModelCInput_01266c1b& i
   ModelCOutput_01266c1b output = logistic_W * hidden_result + logistic_b;
 
   // Convert to probabilities
-  output = output.unaryExpr(std::ptr_fun(expf));
+  output = output.unaryExpr([](float x) { return expf(x); });
   float sum = output.sum();
   output /= sum;
 

@@ -2434,13 +2434,13 @@ DMZ_INTERNAL ModelMOutput_730c4cbd applym_730c4cbd(const ModelMInput_730c4cbd& i
   Eigen::Map<ModelMHiddenW_730c4cbd_1, Eigen::Aligned> hidden_W_1((float *)data_17b52542);
   Eigen::Map<ModelMHiddenB_730c4cbd_1, Eigen::Aligned> hidden_b_1((float *)data_c2191d40);
   ModelMIntermediateResult_730c4cbd_1 intermediate_result_1 = hidden_W_1 * input + hidden_b_1;
-  intermediate_result_1 = intermediate_result_1.unaryExpr(std::ptr_fun(tanhf));
+  intermediate_result_1 = intermediate_result_1.unaryExpr([](float x) { return tanhf(x); });
 
 // Logistic layer
   Eigen::Map<ModelMLogisticW_730c4cbd, Eigen::Aligned> logistic_W((float *)data_52187e6b);
   Eigen::Map<ModelMLogisticB_730c4cbd, Eigen::Aligned> logistic_b((float *)data_01e1d602);
   ModelMOutput_730c4cbd output = logistic_W * intermediate_result_1 + logistic_b;
-  output = output.unaryExpr(std::ptr_fun(expf));
+  output = output.unaryExpr([](float x) { return expf(x); });
 
   float sum = output.sum();
   output /= sum;

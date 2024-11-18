@@ -138,7 +138,7 @@ DMZ_INTERNAL inline ExpiryGroupScores combine_model_results(ExpiryGroupScores pr
   // average_vector = average_vector.pow(root_power);
 
   // So instead use the generic coefficient-wise method:
-  average_vector = average_vector.unaryExpr(std::ptr_fun(nth_root));
+  average_vector = average_vector.unaryExpr([](float x) { return nth_root(x); });
   
   return average_vector;
 #endif
