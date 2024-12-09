@@ -507,7 +507,7 @@ void dmz_blur_card(IplImage* cardImageRGB, ScannerState* state, int unblurDigits
         int num_h = kNumberHeight + 2;
         if (i < 4) num_h *= 2; // blur smaller four digits below first bucket
         cvSetImageROI(cardImageRGB, cvRect(num_x, num_y, num_w, num_h));
-        cv::Mat blurMat = cv::Mat(cardImageRGB, false);
+        cv::Mat blurMat = cv::cvarrToMat(cardImageRGB, false);
         cv::medianBlur(blurMat, blurMat, 25);
         blurMat.release();
     }

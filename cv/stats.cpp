@@ -8,11 +8,14 @@
 #include "processor_support.h"
 
 #include "opencv2/core/core.hpp"
-#include "opencv2/core/internal.hpp"  // used in llcv_equalize_hist
+#include "opencv2/core/mat.hpp"  // used in llcv_equalize_hist
 
 #if DMZ_HAS_NEON_COMPILETIME
   #include <arm_neon.h>
 #endif
+
+// previously in opencv2/core/internals, but that header is no longer available in recent versions
+#define  CV_CAST_8U(t)  (uchar)(!((t) & ~255) ? (t) : (t) > 0 ? 255 : 0)
 
 DMZ_INTERNAL float llcv_stddev_of_abs_neon(IplImage *image) {
 #if DMZ_HAS_NEON_COMPILETIME
@@ -110,6 +113,14 @@ DMZ_INTERNAL float llcv_stddev_of_abs(IplImage *image) {
   }
 }
 
+// previously in opencv2/core/internals, but that header is no longer available in recent versions
+CV_INLINE  CvSize  cvGetMatSizeInternal( const CvMat* mat )
+{
+    CvSize size;
+    size.width = mat->cols;
+    size.height = mat->rows;
+    return size;
+}
 
 // This implementation copied directly from OpenCV's cvEqualizeHist, as
 // part of an effort to remove dependencies on libopencv_imgproc.a.
@@ -119,7 +130,7 @@ DMZ_INTERNAL void llcv_equalize_hist(const IplImage *srcimg, IplImage *dstimg) {
   
   CV_Assert( CV_ARE_SIZES_EQ(src, dst) && CV_ARE_TYPES_EQ(src, dst) &&
             CV_MAT_TYPE(src->type) == CV_8UC1 );
-  CvSize size = cvGetMatSize(src);
+  CvSize size = cvGetMatSizeInternal(src);
   if( CV_IS_MAT_CONT(src->type & dst->type) )
   {
     size.width *= size.height;

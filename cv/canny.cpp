@@ -49,11 +49,19 @@
 #include "canny.h"
 #include "sobel.h"
 #include "opencv2/core/core.hpp" // needed for IplImage
-#include "opencv2/core/internal.hpp"
+#include "opencv2/core/mat.hpp"
 
 #if DMZ_HAS_NEON_COMPILETIME
   #include <arm_neon.h>
 #endif // DMZ_HAS_NEON_COMPILETIME
+
+CV_INLINE  CvSize  cvGetMatSize( const CvMat* mat )
+{
+    CvSize size;
+    size.width = mat->cols;
+    size.height = mat->rows;
+    return size;
+}
 
 DMZ_INTERNAL void llcv_canny7_precomputed_sobel(IplImage *srcarr, IplImage *dstarr, IplImage *sobel_dx, IplImage *sobel_dy, double low_thresh, double high_thresh) {
     cv::AutoBuffer<char> buffer;
